@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">SeniorProject</string>
     <string name="action_settings">Settings</string>
+    <string name="control_text">CNTRL</string>
+    <string name="manual_text">MNL</string>
+    <string name="manual_dialogue_title">Create an Assignment</string>
+    <string name="camera_text">CMR</string>
+    <string name="blank_assignment_title">New Assignment</string>
 </resources>

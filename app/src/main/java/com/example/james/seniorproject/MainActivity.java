@@ -6,47 +6,56 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    public Button controlButton;
+    public Button manualButton;
+    public Button cameraButton;
+    public boolean extraRevealed = false;
+
+    public LinearLayout linearScroll;
+    public AssignmentTracker assignmentTracker = new AssignmentTracker(this);
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        setContentView(R.layout.content_main);
+        controlButton = (Button) findViewById(R.id.control_button);
+        controlButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                toggleExtraButtons();
             }
         });
+        manualButton = (Button) findViewById(R.id.manual_button);
+        manualButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int id = assignmentTracker.addBlankAssignment(v.getContext(), MainActivity.this.linearScroll);
+                assignmentTracker.createDialogBox(v.getContext(), id).show();
+            }
+        });
+        cameraButton = (Button) findViewById(R.id.camera_button);
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "Clicked camera", Toast.LENGTH_SHORT).show();
+            }
+        });
+        linearScroll = (LinearLayout) findViewById(R.id.linear_scroll);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    void toggleExtraButtons() {
+        extraRevealed = !extraRevealed;
+        manualButton.setVisibility(extraRevealed? View.VISIBLE : View.INVISIBLE);
+        cameraButton.setVisibility(extraRevealed? View.VISIBLE : View.INVISIBLE);
     }
 }
