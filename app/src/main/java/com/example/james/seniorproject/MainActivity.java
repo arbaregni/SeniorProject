@@ -1,12 +1,17 @@
 package com.example.james.seniorproject;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.icu.util.TimeUnit;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +22,7 @@ import android.view.View;
 
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -30,15 +36,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
 
     public AssignmentAdapter assignmentAdapter;
 
-    public AlarmManager alarmManager;
-    public PendingIntent alarmIntent;
+    public DailyAlarm alarm;
 
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.content_main);
-
-        alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 
         manualButton = findViewById(R.id.manual_button);
         manualButton.setOnClickListener(new View.OnClickListener() {
@@ -53,7 +56,17 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
             @Override
             public void onClick(View view) {
                 // open dialog which sets the alarm
-
+                Calendar cal = Calendar.getInstance();
+                int hour = cal.get(Calendar.HOUR_OF_DAY);
+                int minute = cal.get(Calendar.MINUTE);
+                TimePickerDialog timePicker = new TimePickerDialog(MainActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                                MainActivity.this.scheduleAlarm(selectedHour, selectedMinute);
+                            }
+                        }, hour, minute, true);
+                timePicker.show();
             }
         });
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -74,23 +87,23 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
         recyclerView.setAdapter(assignmentAdapter);
     }
 
-    void scheduleAlarm(int hourOfDay) {
-        Intent intent = new Intent(getBaseContext(), DailyAlarm.class);
+    void scheduleAlarm(int hourOfDay, int minute) {
+        if (alarm == null)
+            alarm = new DailyAlarm();
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent);
+        alarm.cancelAlarm(getBaseContext());
+        alarm.setAlarm(getBaseContext(), hourOfDay, minute);
 
-        // enable the boot receiver
-        ComponentName receiver = new ComponentName(getApplicationContext(), BootReceiver.class);
-        PackageManager packageManager = getApplicationContext().getPackageManager();
-        packageManager.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
+        Snackbar snackbar;
+        if (true) {
+            snackbar = Snackbar.make(recyclerView, "Alarm set successfully", Snackbar.LENGTH_LONG);
+            snackbar.setActionTextColor(Color.BLUE);
+        } else {
+            snackbar = Snackbar.make(recyclerView, "Unable to create alarm!", Snackbar.LENGTH_LONG);
+            snackbar.setActionTextColor(Color.RED);
+        }
+        snackbar.show();
     }
-
     /**
      * Call back when recycler view is swiped
      * item will be removed
