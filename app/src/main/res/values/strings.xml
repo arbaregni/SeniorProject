@@ -1,9 +1,15 @@
 <resources>
-    <string name="app_name">SeniorProject</string>
+    <string name="app_name">WHS Student Planner</string>
     <string name="action_settings">Settings</string>
     <string name="control_text">CNTRL</string>
     <string name="manual_text">MNL</string>
     <string name="manual_dialogue_title">Create an Assignment</string>
     <string name="camera_text">CMR</string>
     <string name="blank_assignment_title">New Assignment</string>
+    <string name="empty"> </string>
+    <string name="decr_content_description">Decrement assignment due date by one day.</string>
+    <string name="inc_content_description">Increment assignment due date by one day.</string>
+    <string name="edit_dialog_content_box">Describe the assignment here</string>
+    <string name="delete">DELETE</string>
+    <string name="daily_alarm">Set a daily alarm</string>
 </resources>
