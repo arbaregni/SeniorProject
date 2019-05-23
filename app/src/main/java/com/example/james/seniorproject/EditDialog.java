@@ -41,7 +41,11 @@ public class EditDialog extends Dialog {
         editableTitle.setHint(assignment.title);
 
         final EditText editableDescription = findViewById(R.id.editter_description);
-        editableDescription.setHint(assignment.contentDescription);
+        if (assignment.contentDescription.length() == 0) {
+            editableDescription.setHint("Describe your assignment here");
+        } else {
+            editableDescription.setHint(assignment.contentDescription);
+        }
 
         final DatePicker datePicker = findViewById(R.id.editter_date_picker);
         datePicker.setMinDate(assignment.creationDate.getTime());

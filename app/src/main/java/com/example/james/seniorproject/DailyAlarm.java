@@ -1,12 +1,16 @@
 package com.example.james.seniorproject;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.PowerManager;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Toast;
@@ -19,6 +23,13 @@ public class DailyAlarm extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // remind the user to do their homework!
         Toast.makeText(context, "Time to check you planner!", Toast.LENGTH_LONG).show();
+        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        // vibrate for 500 millis
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            vibrator.vibrate(500);
+        }
 ////
 ////        Snackbar snackbar = Snackbar
 ////                .make(context.view, "Time to check your planner!", Snackbar.LENGTH_LONG);
