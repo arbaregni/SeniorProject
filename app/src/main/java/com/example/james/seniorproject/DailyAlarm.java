@@ -22,7 +22,7 @@ public class DailyAlarm extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // remind the user to do their homework!
-        Toast.makeText(context, "Time to check you planner!", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "Time to check your planner!", Toast.LENGTH_LONG).show();
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         // vibrate for 500 millis
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

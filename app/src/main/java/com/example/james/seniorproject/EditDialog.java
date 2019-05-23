@@ -42,7 +42,7 @@ public class EditDialog extends Dialog {
 
         final EditText editableDescription = findViewById(R.id.editter_description);
         if (assignment.contentDescription.length() == 0) {
-            editableDescription.setHint("Describe your assignment here");
+            editableDescription.setHint("Describe your assignment here.");
         } else {
             editableDescription.setHint(assignment.contentDescription);
         }
